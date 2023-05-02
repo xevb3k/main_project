@@ -30,12 +30,14 @@ def test_buy():
     ActionChains(driver).move_to_element(login_page.product_cmf).perform()
     ActionChains(driver).click().perform()
     product_page = Product_page(driver)
-    print('Актвируем фильтр по бренду..')
     
-    product_page.select_brand(['Apple', 'Honor'])
+    print('Актвируем фильтр по бренду..')
+    product_page.select_brand(['Apple', 'Honor', 'Samsung'])
     time.sleep(1)
+    
     product_page.switch_list_grid()
     time.sleep(1)
+    
     # список товаров
     products = product_page.get_products()
     print('Активных карт товара:', len(products))
@@ -44,11 +46,11 @@ def test_buy():
     print(f'Будем добавлять в корзину: {items_count_to_cart} товаров')
     random.shuffle(products)
     for item in range(items_count_to_cart):
-        time.sleep(0)
         product_page.put_to_cart(products[item][2], True)
         print(f'Добавили товар: {products[item][0]}')
     #product_page.wait_until_all_item_loaded()
-
+    
+    # список без кнопки в кортеже
     item_list = []
     for item in products[:items_count_to_cart]:
         item_list.append((item[0], item[1]))
