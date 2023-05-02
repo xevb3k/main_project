@@ -21,6 +21,11 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 #driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
 def test_add_products_to_cart():
+    """
+    Добавляем в корзину случайное количество смартфонов в случайном порядке
+    :return:
+    Сравниваем список добавленных со списком находящихся в корзине
+    """
     random.seed()
     login_page = Login_page(driver)
     login_page.location_window_close()

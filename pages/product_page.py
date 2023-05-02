@@ -53,9 +53,8 @@ class Product_page(Base_page):
         # внутри контейнера с брендами ищем бренд по списку и кликаем его
         for brand_name in brand_name_list:
             locator_filter_brand = (By.XPATH, f'.//a[text()=" {brand_name} "]')
-            filter_brand_cf_apple = WebDriverWait(filter_brand_container, default_timeout).until(EC.presence_of_element_located(locator_filter_brand))
-            
-            filter_brand_cf_apple.click()
+            filter_brand = WebDriverWait(filter_brand_container, default_timeout).until(EC.presence_of_element_located(locator_filter_brand))
+            filter_brand.click()
             time.sleep(2)
 
     def cookie_notification_close(self):

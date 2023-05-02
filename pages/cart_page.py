@@ -29,8 +29,6 @@ class Cart_page(Base_page):
         cart_prod_items = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_all_elements_located(locator_cart_item))
         count_item_in_cart = len(cart_prod_items)
         print(f'Товаров в корзине: {count_item_in_cart}')
-        if not count_item_in_cart:
-            return []
         
         cart_list = []
         for item in cart_prod_items:
