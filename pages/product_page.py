@@ -22,7 +22,11 @@ locator_product_card_price = (By.XPATH, ".//span[contains(@class, 'price__main-v
 #locator_product_not_available = (By.XPATH, ".//div[contains(@class, 'product-notification') and contains(text(), 'Нет в наличии')]")
 locator_list_lazy_load = (By.XPATH, '//mvid-lazy-render')
 locator_filter_available_only = (By.XPATH, "//span[contains(@class, 'filter-name') and text()=' Только в наличии ']")
-locator_product_in_cart_button = (By.XPATH, ".//button[contains(@class, 'button') and @title='Добавить в корзину']")
+locator_product_in_cart_button_old = (By.XPATH, ".//button[contains(@class, 'button') and @title='Добавить в корзину']")
+locator_product_in_cart_button = (By.XPATH, ".//mvid-button[contains(@class, 'cart-button')]")
+locator_product_in_cart_buttons_loading = (By.XPATH, ".//button[contains(@class, 'button--loading')]")
+locator_product_in_cart_all_buttons_loading = (By.XPATH, "//button[contains(@class, 'button--loading')]")
+
 locator_cookies_close_button = (By.XPATH, "//div[@class='mv-main-button--content' and contains(text(),'Понятно')]")
 locator_cart_popup_window = (By.XPATH, "//div[contains(@class, 'tooltip__item')]")
 locator_product_grid_switch = (By.XPATH, "//div[contains(@class, 'listing-view-switcher__pointer--grid')]")
@@ -84,10 +88,11 @@ class Product_page(Base_page):
         if len(cart_popup_window) != 0:
             self.driver.execute_script("arguments[0].remove();", cart_popup_window[0])
             
-    def put_to_cart(self, item):
+    def put_to_cart(self, item, wait_for_loading=False):
         """
         Добавляет товар в корзину
         :param item: кнопка "Добавить в корзину" (WebElement)
+        wait_for_loading: ждать загрузки элемента в корзину
         :return:
         """
         actions = ActionChains(self.driver)
@@ -98,9 +103,19 @@ class Product_page(Base_page):
         loc_y = item.location.get('y')
         if loc_y-window_y <= 113:
             print('Допскролл..')
-            print(f'window_y={window_y}, y={loc_y}')
+            #print(f'window_y={window_y}, y={loc_y}')
             self.driver.execute_script("window.scrollBy(0, -113);")
         item.click()
+        if wait_for_loading:
+            WebDriverWait(item, default_timeout).until(EC.invisibility_of_element_located(locator_product_in_cart_buttons_loading))
+
+    def wait_until_all_item_loaded(self):
+        """
+        Ждет когда все элементы попадут в корзину (индикаторы загрузки на кнопках пропадут)
+        :return:
+        """
+        WebDriverWait(self.driver, default_timeout).until(
+            EC.invisibility_of_element_located(locator_product_in_cart_all_buttons_loading))
 
     def get_products(self):
         """

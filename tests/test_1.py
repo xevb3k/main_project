@@ -32,10 +32,10 @@ def test_buy():
     product_page = Product_page(driver)
     print('Актвируем фильтр по бренду..')
     
-    product_page.select_brand(['Apple'])
-    time.sleep(2)
+    product_page.select_brand(['Apple', 'Honor'])
+    time.sleep(1)
     product_page.switch_list_grid()
-    time.sleep(2)
+    time.sleep(1)
     # список товаров
     products = product_page.get_products()
     print('Активных карт товара:', len(products))
@@ -43,11 +43,16 @@ def test_buy():
     items_count_to_cart = random.randint(1, len(products)-1)
     print(f'Будем добавлять в корзину: {items_count_to_cart} товаров')
     random.shuffle(products)
-    for item in range(1):   #range(items_count_to_cart):
-        time.sleep(0.5)
-        product_page.put_to_cart(products[item][2])
+    for item in range(items_count_to_cart):
+        time.sleep(0)
+        product_page.put_to_cart(products[item][2], True)
         print(f'Добавили товар: {products[item][0]}')
-        
+    #product_page.wait_until_all_item_loaded()
+
+    item_list = []
+    for item in products[:items_count_to_cart]:
+        item_list.append((item[0], item[1]))
+    
     print('Переходим в корзину..')
     product_page.go_to_cart()
     assert product_page.get_current_url() == 'https://www.mvideo.ru/cart'
@@ -55,6 +60,7 @@ def test_buy():
     cart = Cart_page(driver)
     print('Определяем товары в корзине..')
     product_in_cart = cart.get_cart_item()
-
+    assert len(product_in_cart) == len(item_list), '! Неверное количество товаров в корзине'
+    assert product_in_cart.sort() == item_list.sort(), '! Неверные товары в корзине'
     print('OK')
     

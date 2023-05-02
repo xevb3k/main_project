@@ -7,11 +7,13 @@ from selenium.webdriver import Keys
 from base.base_page import Base_page
 
 default_timeout = 5
-locator_products_name = (By.XPATH, "//a[@class='cart-item__name ng-star-inserted']")
-locator_products_price = (By.XPATH, "//span[@class='price__main-value']")
+
+
 locator_cart_prod_container = (By.XPATH, "//div[@class='cart-item']")
 
 locator_cart_item = (By.XPATH, "//li[@class='cart-items__item ng-star-inserted']")
+locator_cart_item_name = (By.XPATH, ".//div[@class='cart-item__name-container']/h3/a")
+locator_cart_item_price = (By.XPATH, ".//span[@class='price__main-value']")
 
 class Cart_page(Base_page):
     
@@ -19,9 +21,25 @@ class Cart_page(Base_page):
         super().__init__(driver)
     
     def get_cart_item(self):
+        """
+        Возвращает список товаров в корзине
+        :return:
+        список кортежей (товар, цена)
+        """
         cart_prod_items = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_all_elements_located(locator_cart_item))
-        print(len(cart_prod_items))
-        return len(cart_prod_items)
+        count_item_in_cart = len(cart_prod_items)
+        print(f'Товаров в корзине: {count_item_in_cart}')
+        if not count_item_in_cart:
+            return []
+        
+        cart_list = []
+        for item in cart_prod_items:
+            item_name = WebDriverWait(item, default_timeout).until(EC.presence_of_element_located(locator_cart_item_name))
+            item_price = WebDriverWait(item, default_timeout).until(EC.presence_of_element_located(locator_cart_item_price))
+            print(item_name.text, item_price.text)
+            cart_list.append((item_name.text, item_price.text))
+            
+        return cart_list
         
         
         
