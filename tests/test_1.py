@@ -5,7 +5,9 @@ from pages.cart_page import Cart_page
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
@@ -16,9 +18,9 @@ chrome_options = Options()
 chrome_options.add_argument("--disable-notifications")
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
-slp = 0
+#driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
-def test_buy():
+def test_add_products_to_cart():
     random.seed()
     login_page = Login_page(driver)
     login_page.location_window_close()
