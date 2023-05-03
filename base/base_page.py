@@ -1,6 +1,8 @@
+import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from time import sleep
+import allure
 
 class Base_page:
     
@@ -8,4 +10,5 @@ class Base_page:
         self.driver = driver
 
     def get_current_url(self):
-        return self.driver.current_url
+        with allure.step('Определение текущего URL'):
+            return self.driver.current_url

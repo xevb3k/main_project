@@ -6,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver import Keys
 from base.base_page import Base_page
 from selenium.webdriver.common.action_chains import ActionChains
+import allure
 
 default_timeout = 5
 
@@ -28,18 +29,19 @@ class Cart_page(Base_page):
         :return:
         список кортежей (товар, цена)
         """
-        cart_prod_items = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_all_elements_located(locator_cart_item_name))
-        count_item_in_cart = len(cart_prod_items)
-        print(f'Товаров в корзине: {count_item_in_cart}')
-        
-        cart_list = []
-        actions = ActionChains(self.driver)
-        for item in cart_prod_items:
-            actions.move_to_element(item).perform()
-            print('Присутствует в корзине: ', item.text)
-            cart_list.append(item.text)
+        with allure.step('Получаем товары из корзины'):
+            cart_prod_items = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_all_elements_located(locator_cart_item_name))
+            count_item_in_cart = len(cart_prod_items)
+            print(f'Товаров в корзине: {count_item_in_cart}')
             
-        return cart_list
+            cart_list = []
+            actions = ActionChains(self.driver)
+            for item in cart_prod_items:
+                actions.move_to_element(item).perform()
+                print('Присутствует в корзине: ', item.text)
+                cart_list.append(item.text)
+                
+            return cart_list
         
         
         

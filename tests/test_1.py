@@ -13,13 +13,27 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
 import random
+import allure
 
 chrome_options = Options()
+chrome_options.add_argument("--ignore-certificate-errors")
+chrome_options.add_argument("--ignore-certificate-errors-spki-list")
 chrome_options.add_argument("--disable-notifications")
+chrome_options.add_argument("--start-maximized")
+# chrome_options.add_argument("--disable-infobars")
+# chrome_options.add_argument("--disable-extensions")
+# chrome_options.add_argument("--no-sandbox")
+# chrome_options.add_argument("--disable-dev-shm-usage")
+
+# для безголового режима
+chrome_options.add_argument("--window-size=1920,1080")
+chrome_options.add_argument("--headless=new")
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 #driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
+
+@allure.description('Добавление товаров в корзину')
 def test_add_products_to_cart():
     """
     Добавляем в корзину случайное количество смартфонов в случайном порядке
