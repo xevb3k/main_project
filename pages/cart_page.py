@@ -9,12 +9,11 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 default_timeout = 5
 
-
-locator_cart_prod_container = (By.XPATH, "//div[@class='cart-item']")
-locator_cart_prod_container_kit = (By.XPATH, "//div[@class='cart-promo-kit']")
-locator_cart_item = (By.XPATH, "//li[@class='cart-items__item ng-star-inserted']")
-locator_cart_item_from_kit = (By.XPATH, "//li[@class='cart-promo-kit__item ng-star-inserted']")
-locator_cart_item_price = (By.XPATH, ".//span[@class='price__main-value']")
+# locator_cart_prod_container = (By.XPATH, "//div[@class='cart-item']")
+# locator_cart_prod_container_kit = (By.XPATH, "//div[@class='cart-promo-kit']")
+# locator_cart_item = (By.XPATH, "//li[@class='cart-items__item ng-star-inserted']")
+# locator_cart_item_from_kit = (By.XPATH, "//li[@class='cart-promo-kit__item ng-star-inserted']")
+# locator_cart_item_price = (By.XPATH, ".//span[@class='price__main-value']")
 
 locator_cart_item_name = (By.XPATH, ".//div[@class='cart-item__name-container']/h3/a")
 
@@ -37,8 +36,7 @@ class Cart_page(Base_page):
         actions = ActionChains(self.driver)
         for item in cart_prod_items:
             actions.move_to_element(item).perform()
-            time.sleep(0)
-            print(item.text)
+            print('Присутствует в корзине: ', item.text)
             cart_list.append(item.text)
             
         return cart_list

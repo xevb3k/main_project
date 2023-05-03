@@ -41,7 +41,7 @@ def test_add_products_to_cart():
     print('Актвируем фильтр по бренду..')
     product_page.select_brand(['Apple', 'Honor', 'Samsung'])
     time.sleep(1)
-    
+    # переключаем сетку товаров на список
     product_page.switch_list_grid()
     time.sleep(1)
     
@@ -54,10 +54,9 @@ def test_add_products_to_cart():
     random.shuffle(products)
     for item in range(items_count_to_cart):
         product_page.put_to_cart(products[item][2], True)
-        print(f'Добавили товар: {products[item][0]}', {products[item][1]})
+        print(f'Добавили товар: {products[item][0]}, {products[item][1]}')
     #product_page.wait_until_all_item_loaded()
     
-    # список без кнопки в кортеже
     item_list = set()
     for item in products[:items_count_to_cart]:
         item_list.add(item[0])
