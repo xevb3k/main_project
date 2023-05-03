@@ -110,7 +110,7 @@ class Product_page(Base_page):
             if loc_y-window_y <= 113:
                 print('Допскролл..')
                 #print(f'window_y={window_y}, y={loc_y}')
-                self.driver.execute_script("window.scrollBy(0, -113);")
+                self.driver.execute_script("window.scrollBy(0, -200);") # ширина футера 113, с запасом 217
             item.click()
             if wait_for_loading:
                 WebDriverWait(item, default_timeout).until(EC.invisibility_of_element_located(locator_product_in_cart_buttons_loading))

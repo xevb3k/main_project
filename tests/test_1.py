@@ -26,8 +26,8 @@ chrome_options.add_argument("--start-maximized")
 # chrome_options.add_argument("--disable-dev-shm-usage")
 
 # для безголового режима
-chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument("--headless=new")
+# chrome_options.add_argument("--window-size=1920,1080")
+# chrome_options.add_argument("--headless=new")
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 #driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
