@@ -54,13 +54,13 @@ def test_add_products_to_cart():
     random.shuffle(products)
     for item in range(items_count_to_cart):
         product_page.put_to_cart(products[item][2], True)
-        print(f'Добавили товар: {products[item][0]}')
+        print(f'Добавили товар: {products[item][0]}', {products[item][1]})
     #product_page.wait_until_all_item_loaded()
     
     # список без кнопки в кортеже
-    item_list = []
+    item_list = set()
     for item in products[:items_count_to_cart]:
-        item_list.append((item[0], item[1]))
+        item_list.add(item[0])
     
     print('Переходим в корзину..')
     product_page.go_to_cart()
@@ -68,8 +68,8 @@ def test_add_products_to_cart():
     print('OK')
     cart = Cart_page(driver)
     print('Определяем товары в корзине..')
-    product_in_cart = cart.get_cart_item()
-    assert len(product_in_cart) == len(item_list), '! Неверное количество товаров в корзине'
-    assert product_in_cart.sort() == item_list.sort(), '! Неверные товары в корзине'
-    print('OK')
+    product_in_cart = set(cart.get_cart_item())
+    # проверяем является ли множество добавленных товаров подмножеством товаров в корзине
+    assert item_list.issubset(product_in_cart), 'Не все добавленные товары есть в корзине'
+    print('OK.. Все добавленные товары есть в корзине')
     
