@@ -26,8 +26,8 @@ chrome_options.add_argument("--start-maximized")
 # chrome_options.add_argument("--disable-dev-shm-usage")
 
 # для безголового режима
-# chrome_options.add_argument("--window-size=1920,1080")
-# chrome_options.add_argument("--headless=new")
+chrome_options.add_argument("--window-size=1920,1080")
+#chrome_options.add_argument("--headless=new")
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 #driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
@@ -43,16 +43,16 @@ def test_add_products_to_cart():
     random.seed()
     login_page = Login_page(driver)
     login_page.location_window_close()
-    print('Раскрываем каталог..')
+    print('\nВыбор каталога..')
     ActionChains(driver).move_to_element(login_page.button_catalog).perform()
     ActionChains(driver).click().perform()
-    print('Выбираем смартфоны..')
+    print('Переход к смартфонам..')
     ActionChains(driver).move_to_element(login_page.catalog_smf_gadget).perform()
     ActionChains(driver).move_to_element(login_page.product_cmf).perform()
     ActionChains(driver).click().perform()
     product_page = Product_page(driver)
     
-    print('Актвируем фильтр по бренду..')
+    print('Активация фильтра по брендам..')
     product_page.select_brand(['Apple', 'Honor', 'Samsung'])
     time.sleep(1)
     # переключаем сетку товаров на список
@@ -61,28 +61,28 @@ def test_add_products_to_cart():
     
     # список товаров
     products = product_page.get_products()
-    print('Активных карт товара:', len(products))
+    print('Найдено активных карт товара:', len(products))
     # добавляем случайное число товаров в корзину в случайном порядке
     items_count_to_cart = random.randint(1, len(products)-1)
-    print(f'Будем добавлять в корзину: {items_count_to_cart} товаров')
+    print(f'Выбрано для добавления в корзину: {items_count_to_cart} карт товара')
     random.shuffle(products)
     for item in range(items_count_to_cart):
         product_page.put_to_cart(products[item][2], True)
-        print(f'Добавили товар: {products[item][0]}, {products[item][1]}')
+        print(f'Добавление карты товара: {products[item][0]}, {products[item][1]}')
     #product_page.wait_until_all_item_loaded()
     
     item_list = set()
     for item in products[:items_count_to_cart]:
         item_list.add(item[0])
     
-    print('Переходим в корзину..')
+    print('Переход в корзину..')
     product_page.go_to_cart()
     assert product_page.get_current_url() == 'https://www.mvideo.ru/cart'
     print('OK')
     cart = Cart_page(driver)
-    print('Определяем товары в корзине..')
+    print('Определение карт товаров в корзине..')
     product_in_cart = set(cart.get_cart_item())
     # проверяем является ли множество добавленных товаров подмножеством товаров в корзине
-    assert item_list.issubset(product_in_cart), 'Не все добавленные товары есть в корзине'
+    assert item_list.issubset(product_in_cart), '! Не все добавленные товары есть в корзине'
     print('OK.. Все добавленные товары есть в корзине')
     

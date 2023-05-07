@@ -56,6 +56,7 @@ class Product_page(Base_page):
             # внутри контейнера с брендами ищем бренд по списку и кликаем его
             for brand_name in brand_name_list:
                 locator_filter_brand = (By.XPATH, f'.//a[text()=" {brand_name} "]')
+                print(f' {brand_name}.. OK')
                 filter_brand = WebDriverWait(filter_brand_container, default_timeout).until(EC.presence_of_element_located(locator_filter_brand))
                 filter_brand.click()
                 time.sleep(2)
@@ -78,7 +79,7 @@ class Product_page(Base_page):
         with allure.step('Переключить отображение товаров с сетки на список'):
             switch_indicator = self.driver.find_elements(*locator_product_grid_switch)
             if len(switch_indicator) != 0:
-                print('Переключаем сетку товаров на список..')
+                print('Переключение сетки товаров на список..')
                 switch_button = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_element_located(locator_product_grid_switch_button))
                 switch_button.click()
             print('Товары отображены списком')
@@ -120,7 +121,7 @@ class Product_page(Base_page):
         Ждет когда все элементы попадут в корзину (индикаторы загрузки на кнопках пропадут)
         :return:
         """
-        with allure.step('Ждем пока все товары добавяется'):
+        with allure.step('Ожидание пока все товары добавяется'):
             WebDriverWait(self.driver, default_timeout).until(EC.invisibility_of_element_located(locator_product_in_cart_all_buttons_loading))
 
     def get_products(self):
@@ -128,11 +129,11 @@ class Product_page(Base_page):
         Возвращает список товаров со страницы
         :return: список кортежей в формате (имя_товара, цена, WebElement кнопка_добавления_в_корзину)
         """
-        with allure.step('Получаем список товаров'):
+        with allure.step('Получение списка товаров'):
             actions = ActionChains(self.driver)
             # все карточки товаров на странице
             products_cards = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_all_elements_located(locator_list_product_card))
-            print('Найдено карт товаров ', len(products_cards))
+            print('Найдено карт товаров на странице ', len(products_cards))
             
             # 1 способ обойти lazyload - крутить вниз по 200пикс
             # while len(self.driver.find_elements(*locator_list_lazy_load)) > 0:
@@ -161,7 +162,7 @@ class Product_page(Base_page):
         Переходим в корзину
         :return:
         """
-        with allure.step('Переходим в корзину'):
+        with allure.step('Переход в корзину'):
             cart = WebDriverWait(self.driver, default_timeout).until(EC.presence_of_element_located(locator_cart))
             cart.click()
         
